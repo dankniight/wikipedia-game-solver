@@ -1,7 +1,21 @@
 # Wikipedia Game Solver
+The Wikipedia Game is a challenge where you start on one Wikipedia page and must reach a target page by clicking only the links within each article you visit.
 
-This project finds the shortest path between two Wikipedia pages using a breadth-first search (BFS) algorithm. It interacts with the Wikipedia API to retrieve page links and navigate through them.
+This project uses a breadth-first search (BFS) algorithm to find the shortest path between two Wikipedia pages. It interacts with the Wikipedia API to retrieve page links and navigate through them.
 The project is a simple proof-of-concept for my portfolio, as the 1-second crawl delay to comply with wikipedia's limits means the program can easily run for hours depending on the input.
+
+## Example Path
+**Starting Page:** Tetris  
+**Target Page:** Daft Punk
+
+```mermaid
+flowchart LR
+    A[Tetris] --> B[Amiga]
+    B --> C["Weird Al" Yankovic]
+    C --> D[Daft Punk]
+    
+
+```
 
 ## How It Works
 
