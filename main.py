@@ -13,14 +13,14 @@ HEADERS = {
 def get_page_links(page_title):
     url = WIKIPEDIA_LINKS_URL + page_title
     try:
-        time.sleep(REQUEST_DELAY)  # Be respectful to Wikipedia's servers
-        response = requests.get(url, headers=HEADERS) # Include headers
+        time.sleep(REQUEST_DELAY) 
+        response = requests.get(url, headers=HEADERS)
         response.raise_for_status()
         
         data = response.json()
         pages = data.get("query", {}).get("pages", {})
         
-        # Check if the page exists
+        # Check if page exists
         page_ids = list(pages.keys())
         if not page_ids or page_ids[0] == "-1":
             print(f"Page '{page_title}' does not exist.")
@@ -32,7 +32,7 @@ def get_page_links(page_title):
             if "links" in page_data:
                 for link in page_data["links"]:
                     title = link.get("title", "")
-                    # Filter out special pages and keep only standard articles
+                    # Remove special pages 
                     if title and not title.startswith(("Special:", "Wikipedia:", "Category:", "File:", "Template:", "Help:")):
                         links.append(title)
         
@@ -61,31 +61,24 @@ def find_shortest_path(start_page, end_page, max_depth=3):
     while queue:
         current_page, path = queue.popleft()
         
-        # Limit search depth to prevent extremely long searches
+        # Limit search depth to prevent searches that would take too long for this proof of concept
         if len(path) > max_depth:
             continue
             
         print(f"Exploring links from: {current_page} (path length: {len(path)})")
         
-        # Get all links from the current page
         links = get_page_links(current_page)
         
         for link in links:
-            # Normalize the link for comparison
             normalized_link = normalize_title(link)
             
             if normalized_link == end_page:
-                # Found the target page
                 print(f"Found path to {end_page}!")
                 return path + [normalized_link]
             
             if normalized_link not in visited:
                 visited.add(normalized_link)
                 queue.append((normalized_link, path + [normalized_link]))
-                
-                # Print progress for long searches
-                if len(queue) % 100 == 0:
-                    print(f"Queue size: {len(queue)}, Visited pages: {len(visited)}")
     
     # No path found
     return None
@@ -114,8 +107,7 @@ def main(start_page=None, end_page=None):
         print(f"\nTotal steps: {len(path) - 1}")
     else:
         print("\nNo path found between the given pages.")
-
-# For testing with predefined inputs
+        
 if __name__ == "__main__":
     # Example usage:
     # main("Tetris", "Daft Punk")
